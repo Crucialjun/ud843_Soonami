@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 url = new URL(stringUrl);
             } catch (MalformedURLException exception) {
                 Log.e(LOG_TAG, "Error with creating URL", exception);
+                return null;
             }
             return url;
         }
@@ -161,22 +162,16 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setReadTimeout(10000 /* milliseconds */);
                 urlConnection.setConnectTimeout(15000 /* milliseconds */);
                 urlConnection.connect();
-
-                if(urlConnection.getResponseCode() == 200){
-                    inputStream = urlConnection.getInputStream();
-                    jsonResponse = readFromStream(inputStream);
-                } else{
-                    Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
-                }
-
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readFromStream(inputStream);
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results. ", e);
+                // TODO: Handle the exception
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
                 if (inputStream != null) {
-                    Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results. ");
+                    // function must handle java.io.IOException here
                     inputStream.close();
                 }
             }
